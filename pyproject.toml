@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tfo_sensor_selection"
+version = "0.1.0"
+description = "Training and evaluation utilities for TFO sensor selection experiments"
+readme = "data/description.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "PyYAML>=6.0",
+    "scikit-learn>=1.3",
+    "scipy>=1.10",
+    "optuna>=3.6",
+    "torch>=2.2",
+    "infomeasure>=0.2.0",
+    "sage-importance>=0.0.2",
+    "arfpy>=0.1",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["tfo_sensor_selection*"]

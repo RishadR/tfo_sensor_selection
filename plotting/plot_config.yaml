@@ -1,0 +1,61 @@
+# Matplotlib plotting configuration defaults
+# Load with: matplotlib.rcParams.update(yaml.safe_load(open('plot_config.yaml')))
+
+# Figure settings
+figure.dpi: 400
+savefig.dpi: 400
+
+# Font settings
+font.sans-serif: ["Helvetica", "Arial", "sans-serif"]
+font.family: sans-serif
+font.size: 12
+
+# Text settings
+text.usetex: false
+
+# Axes settings
+axes.labelsize: 14
+xtick.labelsize: 10
+ytick.labelsize: 10
+axes.titlesize: 14
+axes.grid: true
+grid.color: '#e0e0e0'
+grid.alpha: 0.7
+
+# Legend settings
+legend.fontsize: 10
+legend.frameon: true
+legend.facecolor: white
+legend.edgecolor: none
+
+# Xtick and Ytick settings
+xtick.direction: in
+ytick.direction: in
+xtick.major.size: 4
+ytick.major.size: 4
+
+# Line and marker settings
+lines.linewidth: 1.6
+lines.markersize: 6
+
+
+# Save format settings
+savefig.format: "pdf"
+savefig.bbox: tight
+savefig.pad_inches: 0.1
+
+# SVG settings - store text as text instead of paths
+svg.fonttype: none
+
+# Default colormap (for images/heatmaps)
+image.cmap: Accent
+
+# Color cycle for line plots (using Accent colormap colors)
+# axes.prop_cycle: cycler('color', ['7fc97f', 'beaed4', 'fdc086', '386cb0', 'f0027f', 'bf5b17', '666666'])
+
+# Custom line styles and markers for plotting
+plotting:
+  # colors: ['#213C51', '#6594B1', '#DDAED3', '#D02752']  # old
+  colors: ["#2d3047","#d1345b","#ff9b71", "#1b998b", "#FFB100"]
+  line_styles: ['-', '--', ':', '-.', '-']
+  markers: ['s', 'o', '^', 'v', '<']

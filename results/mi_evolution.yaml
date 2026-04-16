@@ -1,0 +1,682 @@
+experiments:
+- experiment_id: mi_evolution_0001
+  timestamp: '2026-04-07T21:26:42.551030+00:00'
+  dataset: invivo
+  evolution_type: wavelength
+  method: SAGE
+  sequence:
+  - 735
+  - 810
+  - 850
+  label_name: fSaO2
+  steps:
+  - step_index: 1
+    included_values:
+    - 735
+    mi: 0.30843151623433035
+    p_value: 0.0
+    t_score: 82.95480080456599
+    confidence_interval_95_lower: -0.009464294336332736
+    confidence_interval_95_upper: 0.0038620786146578026
+  - step_index: 2
+    included_values:
+    - 735
+    - 810
+    mi: 0.4460232522386305
+    p_value: 0.0
+    t_score: 170.65719287869047
+    confidence_interval_95_lower: -0.004692924321349206
+    confidence_interval_95_upper: 0.002440666322619172
+  - step_index: 3
+    included_values:
+    - 735
+    - 810
+    - 850
+    mi: 0.532590088510361
+    p_value: 0.0
+    t_score: 112.97963749855013
+    confidence_interval_95_lower: -0.0069903719535259435
+    confidence_interval_95_upper: 0.007747992347955493
+- experiment_id: mi_evolution_0002
+  timestamp: '2026-04-07T21:26:42.551044+00:00'
+  dataset: invivo
+  evolution_type: wavelength
+  method: PFI
+  sequence:
+  - 735
+  - 850
+  - 810
+  label_name: fSaO2
+  steps:
+  - step_index: 1
+    included_values:
+    - 735
+    mi: 0.3087311520585084
+    p_value: 0.0
+    t_score: 70.79838097116709
+    confidence_interval_95_lower: -0.00705348021755227
+    confidence_interval_95_upper: 0.008283108168842927
+  - step_index: 2
+    included_values:
+    - 735
+    - 850
+    mi: 0.42839353641137534
+    p_value: 0.0
+    t_score: 127.7717486413567
+    confidence_interval_95_lower: -0.005411134004617799
+    confidence_interval_95_upper: 0.0064995887812564395
+  - step_index: 3
+    included_values:
+    - 735
+    - 850
+    - 810
+    mi: 0.5320820829059717
+    p_value: 0.0
+    t_score: 201.69670901148487
+    confidence_interval_95_lower: -0.003769210112996327
+    confidence_interval_95_upper: 0.005074075055757678
+- experiment_id: mi_evolution_0003
+  timestamp: '2026-04-07T21:26:42.551048+00:00'
+  dataset: invivo
+  evolution_type: wavelength
+  method: OURS
+  sequence:
+  - 735
+  - 810
+  - 850
+  label_name: fSaO2
+  steps:
+  - step_index: 1
+    included_values:
+    - 735
+    mi: 0.30846344187389946
+    p_value: 0.0
+    t_score: 80.80479538370058
+    confidence_interval_95_lower: -0.006214259377875772
+    confidence_interval_95_upper: 0.007928090893231125
+  - step_index: 2
+    included_values:
+    - 735
+    - 810
+    mi: 0.44622989203830293
+    p_value: 0.0
+    t_score: 117.81781924686841
+    confidence_interval_95_lower: -0.005007783045848364
+    confidence_interval_95_upper: 0.007620510539058224
+  - step_index: 3
+    included_values:
+    - 735
+    - 810
+    - 850
+    mi: 0.5323761242864877
+    p_value: 0.0
+    t_score: 96.68279171127627
+    confidence_interval_95_lower: -0.0056717683271573635
+    confidence_interval_95_upper: 0.012969035509513461
+- experiment_id: mi_evolution_0004
+  timestamp: '2026-04-07T21:26:42.551051+00:00'
+  dataset: invivo
+  evolution_type: detector_distance
+  method: SAGE
+  sequence:
+  - 30
+  - 100
+  - 45
+  - 15
+  - 75
+  label_name: fSaO2
+  steps:
+  - step_index: 1
+    included_values:
+    - 30
+    mi: 0.40130221720376186
+    p_value: 0.0
+    t_score: 92.59376614374426
+    confidence_interval_95_lower: -0.005497636427093124
+    confidence_interval_95_upper: 0.007226536927260146
+  - step_index: 2
+    included_values:
+    - 30
+    - 100
+    mi: 0.5210034610511155
+    p_value: 0.0
+    t_score: 147.16485183550574
+    confidence_interval_95_lower: -0.005478539292753337
+    confidence_interval_95_upper: 0.006352555475773456
+  - step_index: 3
+    included_values:
+    - 30
+    - 100
+    - 45
+    mi: 0.5232789653655506
+    p_value: 0.0
+    t_score: 114.07737763369504
+    confidence_interval_95_lower: -0.007168636083740397
+    confidence_interval_95_upper: 0.008048644564498707
+  - step_index: 4
+    included_values:
+    - 30
+    - 100
+    - 45
+    - 15
+    mi: 0.5313431071432803
+    p_value: 0.0
+    t_score: 165.55317566737943
+    confidence_interval_95_lower: -0.008553168397029185
+    confidence_interval_95_upper: 0.0024361561776116286
+  - step_index: 5
+    included_values:
+    - 30
+    - 100
+    - 45
+    - 15
+    - 75
+    mi: 0.5322912940950334
+    p_value: 0.0
+    t_score: 138.55978210928004
+    confidence_interval_95_lower: -0.005701998450564575
+    confidence_interval_95_upper: 0.006973927400417787
+- experiment_id: mi_evolution_0005
+  timestamp: '2026-04-07T21:26:42.551054+00:00'
+  dataset: invivo
+  evolution_type: detector_distance
+  method: PFI
+  sequence:
+  - 15
+  - 100
+  - 75
+  - 30
+  - 45
+  label_name: fSaO2
+  steps:
+  - step_index: 1
+    included_values:
+    - 15
+    mi: 0.4019152941775678
+    p_value: 0.0
+    t_score: 98.84703049734757
+    confidence_interval_95_lower: -0.006231541617913156
+    confidence_interval_95_upper: 0.009433808829283154
+  - step_index: 2
+    included_values:
+    - 15
+    - 100
+    mi: 0.5303427870135883
+    p_value: 0.0
+    t_score: 153.24371868499134
+    confidence_interval_95_lower: -0.005852650704417189
+    confidence_interval_95_upper: 0.005377305802376197
+  - step_index: 3
+    included_values:
+    - 15
+    - 100
+    - 75
+    mi: 0.5335928415959216
+    p_value: 0.0
+    t_score: 171.65996586125
+    confidence_interval_95_lower: -0.006171592722185942
+    confidence_interval_95_upper: 0.00471682215214653
+  - step_index: 4
+    included_values:
+    - 15
+    - 100
+    - 75
+    - 30
+    mi: 0.5313073376568299
+    p_value: 0.0
+    t_score: 120.62401153609234
+    confidence_interval_95_lower: -0.007576438519729757
+    confidence_interval_95_upper: 0.0076685447532174565
+  - step_index: 5
+    included_values:
+    - 15
+    - 100
+    - 75
+    - 30
+    - 45
+    mi: 0.5323242913162296
+    p_value: 0.0
+    t_score: 143.02104372151
+    confidence_interval_95_lower: -0.007080906122112398
+    confidence_interval_95_upper: 0.00435077445773486
+- experiment_id: mi_evolution_0006
+  timestamp: '2026-04-07T21:26:42.551057+00:00'
+  dataset: invivo
+  evolution_type: detector_distance
+  method: OURS
+  sequence:
+  - 15
+  - 45
+  - 30
+  - 100
+  - 75
+  label_name: fSaO2
+  steps:
+  - step_index: 1
+    included_values:
+    - 15
+    mi: 0.40251439918627635
+    p_value: 0.0
+    t_score: 120.75180904416582
+    confidence_interval_95_lower: -0.00546428746389541
+    confidence_interval_95_upper: 0.005318460333035112
+  - step_index: 2
+    included_values:
+    - 15
+    - 45
+    mi: 0.4456772417326003
+    p_value: 0.0
+    t_score: 117.42561015456889
+    confidence_interval_95_lower: -0.006552545235066095
+    confidence_interval_95_upper: 0.004893372596925741
+  - step_index: 3
+    included_values:
+    - 15
+    - 45
+    - 30
+    mi: 0.4433197900476138
+    p_value: 0.0
+    t_score: 113.56135482754723
+    confidence_interval_95_lower: -0.0073742972003692855
+    confidence_interval_95_upper: 0.006878120877740379
+  - step_index: 4
+    included_values:
+    - 15
+    - 45
+    - 30
+    - 100
+    mi: 0.5313887907760594
+    p_value: 0.0
+    t_score: 115.71240299083722
+    confidence_interval_95_lower: -0.008648806160270028
+    confidence_interval_95_upper: 0.008738172136011451
+  - step_index: 5
+    included_values:
+    - 15
+    - 45
+    - 30
+    - 100
+    - 75
+    mi: 0.5322088946218839
+    p_value: 0.0
+    t_score: 106.39787822000643
+    confidence_interval_95_lower: -0.006506539534640424
+    confidence_interval_95_upper: 0.010435615977213557
+- experiment_id: mi_evolution_0007
+  timestamp: '2026-04-07T21:26:42.551060+00:00'
+  dataset: simulation
+  evolution_type: wavelength
+  method: SAGE
+  sequence:
+  - 910
+  - 850
+  - 690
+  - 735
+  - 810
+  label_name: fetal_saturation
+  steps:
+  - step_index: 1
+    included_values:
+    - 910
+    mi: 0.5581463683441438
+    p_value: 0.0
+    t_score: 127.06136443605465
+    confidence_interval_95_lower: -0.004960677063680174
+    confidence_interval_95_upper: 0.008689260444473322
+  - step_index: 2
+    included_values:
+    - 910
+    - 850
+    mi: 0.6295571458198974
+    p_value: 0.0
+    t_score: 198.1757062309131
+    confidence_interval_95_lower: -0.004895535443842578
+    confidence_interval_95_upper: 0.0060754762491820324
+  - step_index: 3
+    included_values:
+    - 910
+    - 850
+    - 690
+    mi: 1.9398506579913375
+    p_value: 0.0
+    t_score: 702.1532005430433
+    confidence_interval_95_lower: -0.0026229252248430213
+    confidence_interval_95_upper: 0.005087602346566645
+  - step_index: 4
+    included_values:
+    - 910
+    - 850
+    - 690
+    - 735
+    mi: 1.854793791648231
+    p_value: 0.0
+    t_score: 588.8463254093344
+    confidence_interval_95_lower: -0.004641639860100753
+    confidence_interval_95_upper: 0.005967128664896052
+  - step_index: 5
+    included_values:
+    - 910
+    - 850
+    - 690
+    - 735
+    - 810
+    mi: 2.0314984120947113
+    p_value: 0.0
+    t_score: 505.037040952882
+    confidence_interval_95_lower: -0.007272910678520561
+    confidence_interval_95_upper: 0.0056443656976913475
+- experiment_id: mi_evolution_0008
+  timestamp: '2026-04-07T21:26:42.551063+00:00'
+  dataset: simulation
+  evolution_type: wavelength
+  method: PFI
+  sequence:
+  - 690
+  - 735
+  - 910
+  - 850
+  - 810
+  label_name: fetal_saturation
+  steps:
+  - step_index: 1
+    included_values:
+    - 690
+    mi: 1.194916219362128
+    p_value: 0.0
+    t_score: 371.7729352427389
+    confidence_interval_95_lower: -0.003868530007907373
+    confidence_interval_95_upper: 0.006156978261200335
+  - step_index: 2
+    included_values:
+    - 690
+    - 735
+    mi: 1.7299296112254174
+    p_value: 0.0
+    t_score: 484.2689408938229
+    confidence_interval_95_lower: -0.0056772537537370105
+    confidence_interval_95_upper: 0.005775141395057643
+  - step_index: 3
+    included_values:
+    - 690
+    - 735
+    - 910
+    mi: 1.8677428210145495
+    p_value: 0.0
+    t_score: 612.2608145012481
+    confidence_interval_95_lower: -0.005902043963751919
+    confidence_interval_95_upper: 0.0036306454351758286
+  - step_index: 4
+    included_values:
+    - 690
+    - 735
+    - 910
+    - 850
+    mi: 1.8547936940675238
+    p_value: 0.0
+    t_score: 450.04429242192435
+    confidence_interval_95_lower: -0.0090352876907935
+    confidence_interval_95_upper: 0.006966295975914895
+  - step_index: 5
+    included_values:
+    - 690
+    - 735
+    - 910
+    - 850
+    - 810
+    mi: 2.0314984120947113
+    p_value: 0.0
+    t_score: 559.8751480816576
+    confidence_interval_95_lower: -0.004850813680921258
+    confidence_interval_95_upper: 0.00912915851736741
+- experiment_id: mi_evolution_0009
+  timestamp: '2026-04-07T21:26:42.551066+00:00'
+  dataset: simulation
+  evolution_type: wavelength
+  method: OURS
+  sequence:
+  - 690
+  - 910
+  - 735
+  - 850
+  - 810
+  label_name: fetal_saturation
+  steps:
+  - step_index: 1
+    included_values:
+    - 690
+    mi: 1.1949794156507652
+    p_value: 0.0
+    t_score: 399.56614101371355
+    confidence_interval_95_lower: -0.004525573833693003
+    confidence_interval_95_upper: 0.006162446304896705
+  - step_index: 2
+    included_values:
+    - 690
+    - 910
+    mi: 1.9034553478436766
+    p_value: 0.0
+    t_score: 634.3769798338764
+    confidence_interval_95_lower: -0.0049069988965626705
+    confidence_interval_95_upper: 0.005197086181253466
+  - step_index: 3
+    included_values:
+    - 690
+    - 910
+    - 735
+    mi: 1.8677438745042327
+    p_value: 0.0
+    t_score: 420.00265294856894
+    confidence_interval_95_lower: -0.00937032600644551
+    confidence_interval_95_upper: 0.006585168684012071
+  - step_index: 4
+    included_values:
+    - 690
+    - 910
+    - 735
+    - 850
+    mi: 1.8547931270444944
+    p_value: 0.0
+    t_score: 489.5140907856607
+    confidence_interval_95_lower: -0.005454033266528539
+    confidence_interval_95_upper: 0.007998493700687748
+  - step_index: 5
+    included_values:
+    - 690
+    - 910
+    - 735
+    - 850
+    - 810
+    mi: 2.0314988242768366
+    p_value: 0.0
+    t_score: 762.4430400289317
+    confidence_interval_95_lower: -0.003941097638959428
+    confidence_interval_95_upper: 0.004705675471952095
+- experiment_id: mi_evolution_0010
+  timestamp: '2026-04-07T21:26:42.551069+00:00'
+  dataset: simulation
+  evolution_type: detector_distance
+  method: SAGE
+  sequence:
+  - 10
+  - 90
+  - 70
+  - 30
+  - 50
+  label_name: fetal_saturation
+  steps:
+  - step_index: 1
+    included_values:
+    - 10
+    mi: 0.5707932555502926
+    p_value: 0.0
+    t_score: 168.09982698596272
+    confidence_interval_95_lower: -0.006528166696176672
+    confidence_interval_95_upper: 0.006102990096155691
+  - step_index: 2
+    included_values:
+    - 10
+    - 90
+    mi: 2.0223756419437975
+    p_value: 0.0
+    t_score: 502.94288608938666
+    confidence_interval_95_lower: -0.005468903107880066
+    confidence_interval_95_upper: 0.007732658634392533
+  - step_index: 3
+    included_values:
+    - 10
+    - 90
+    - 70
+    mi: 2.03150031729209
+    p_value: 0.0
+    t_score: 555.3918059729774
+    confidence_interval_95_lower: -0.0063667594996944495
+    confidence_interval_95_upper: 0.0066108271842287665
+  - step_index: 4
+    included_values:
+    - 10
+    - 90
+    - 70
+    - 30
+    mi: 2.0314988242768366
+    p_value: 0.0
+    t_score: 552.3452022401577
+    confidence_interval_95_lower: -0.007429532755459435
+    confidence_interval_95_upper: 0.004019806368212825
+  - step_index: 5
+    included_values:
+    - 10
+    - 90
+    - 70
+    - 30
+    - 50
+    mi: 2.031500729474215
+    p_value: 0.0
+    t_score: 615.164157330991
+    confidence_interval_95_lower: -0.0066594182939469435
+    confidence_interval_95_upper: 0.0036812052237542685
+- experiment_id: mi_evolution_0011
+  timestamp: '2026-04-07T21:26:42.551072+00:00'
+  dataset: simulation
+  evolution_type: detector_distance
+  method: PFI
+  sequence:
+  - 70
+  - 90
+  - 50
+  - 30
+  - 10
+  label_name: fetal_saturation
+  steps:
+  - step_index: 1
+    included_values:
+    - 70
+    mi: 1.8880997236913506
+    p_value: 0.0
+    t_score: 460.30071104844825
+    confidence_interval_95_lower: -0.00826666929194102
+    confidence_interval_95_upper: 0.006035181638561934
+  - step_index: 2
+    included_values:
+    - 70
+    - 90
+    mi: 2.0314940612833903
+    p_value: 0.0
+    t_score: 471.08311038604614
+    confidence_interval_95_lower: -0.007967727025333948
+    confidence_interval_95_upper: 0.006740835689730119
+  - step_index: 3
+    included_values:
+    - 70
+    - 90
+    - 50
+    mi: 2.0315048970934804
+    p_value: 0.0
+    t_score: 658.8379438094727
+    confidence_interval_95_lower: -0.004019574090081841
+    confidence_interval_95_upper: 0.0057919820172656535
+  - step_index: 4
+    included_values:
+    - 70
+    - 90
+    - 50
+    - 30
+    mi: 2.031496625972169
+    p_value: 0.0
+    t_score: 769.4430638009458
+    confidence_interval_95_lower: -0.004189367854967449
+    confidence_interval_95_upper: 0.003907960679533151
+  - step_index: 5
+    included_values:
+    - 70
+    - 90
+    - 50
+    - 30
+    - 10
+    mi: 2.0315025155967574
+    p_value: 0.0
+    t_score: 491.7171464670293
+    confidence_interval_95_lower: -0.005794794130581936
+    confidence_interval_95_upper: 0.008953051726620058
+- experiment_id: mi_evolution_0012
+  timestamp: '2026-04-07T21:26:42.551074+00:00'
+  dataset: simulation
+  evolution_type: detector_distance
+  method: OURS
+  sequence:
+  - 70
+  - 90
+  - 50
+  - 30
+  - 10
+  label_name: fetal_saturation
+  steps:
+  - step_index: 1
+    included_values:
+    - 70
+    mi: 1.8880879542620683
+    p_value: 0.0
+    t_score: 595.339803820435
+    confidence_interval_95_lower: -0.0038427491103566773
+    confidence_interval_95_upper: 0.005761318038278316
+  - step_index: 2
+    included_values:
+    - 70
+    - 90
+    mi: 2.0315012057735595
+    p_value: 0.0
+    t_score: 507.48682743487495
+    confidence_interval_95_lower: -0.004757720048081402
+    confidence_interval_95_upper: 0.007875551994373758
+  - step_index: 3
+    included_values:
+    - 70
+    - 90
+    - 50
+    mi: 2.031499300576181
+    p_value: 0.0
+    t_score: 624.0407023557044
+    confidence_interval_95_lower: -0.005774630822097971
+    confidence_interval_95_upper: 0.003964158640685597
+  - step_index: 4
+    included_values:
+    - 70
+    - 90
+    - 50
+    - 30
+    mi: 2.03150031729209
+    p_value: 0.0
+    t_score: 626.3863501886088
+    confidence_interval_95_lower: -0.004718355484988627
+    confidence_interval_95_upper: 0.0068106456239072945
+  - step_index: 5
+    included_values:
+    - 70
+    - 90
+    - 50
+    - 30
+    - 10
+    mi: 2.031498888394056
+    p_value: 0.0
+    t_score: 634.9816164475394
+    confidence_interval_95_lower: -0.005078344014161217
+    confidence_interval_95_upper: 0.006154053945153029

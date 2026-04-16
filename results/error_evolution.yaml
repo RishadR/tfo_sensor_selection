@@ -1,0 +1,575 @@
+experiments:
+- experiment_id: error_evolution_0001
+  timestamp: '2026-03-30T18:46:25.318204+00:00'
+  dataset: invivo
+  evolution_type: wavelength
+  sequence:
+  - 735
+  - 810
+  - 850
+  model_name: gb
+  seeds:
+  - 0
+  - 1
+  - 2
+  n_val_groups: 1
+  n_test_groups: 1
+  n_trials: 10
+  steps:
+  - step_index: 1
+    included_values:
+    - 735
+    mae_by_seed:
+    - seed: 0
+      train: 10.113190744177475
+      val: 9.975614466715667
+      test: 6.418465402167559
+    - seed: 1
+      train: 8.675202573715707
+      val: 5.20125937719019
+      test: 7.630556080283789
+    - seed: 2
+      train: 3.1926980420470548
+      val: 2.6999991964142183
+      test: 10.55225198692764
+    mae_mean:
+      train: 7.327030453313412
+      val: 5.958957680106692
+      test: 8.200424489792995
+    mae_variance:
+      train: 8.890987239821742
+      val: 9.109482952695211
+      test: 3.010406923468679
+  - step_index: 2
+    included_values:
+    - 735
+    - 810
+    mae_by_seed:
+    - seed: 0
+      train: 9.882519180352464
+      val: 9.652239596736857
+      test: 7.627627174694748
+    - seed: 1
+      train: 9.776327974352517
+      val: 5.947629347702
+      test: 9.876728180763866
+    - seed: 2
+      train: 2.455221197834133
+      val: 2.081444144604999
+      test: 10.418051284059459
+    mae_mean:
+      train: 7.371356117513038
+      val: 5.893771029681285
+      test: 9.307468879839357
+    mae_variance:
+      train: 12.086070702948442
+      val: 9.554274322213415
+      test: 1.4597725275318367
+  - step_index: 3
+    included_values:
+    - 735
+    - 810
+    - 850
+    mae_by_seed:
+    - seed: 0
+      train: 8.212875674592528
+      val: 8.031148139887765
+      test: 9.343442343200946
+    - seed: 1
+      train: 10.065224564209636
+      val: 6.02304197796743
+      test: 10.095909722408036
+    - seed: 2
+      train: 3.5292806529117846
+      val: 2.945875530372094
+      test: 11.055123378757163
+    mae_mean:
+      train: 7.269126963904649
+      val: 5.6666885494090975
+      test: 10.164825148122048
+    mae_variance:
+      train: 7.565091283067759
+      val: 4.373493468537695
+      test: 0.4906833291978052
+- experiment_id: error_evolution_0002
+  timestamp: '2026-03-30T19:29:00.491878+00:00'
+  dataset: invivo
+  evolution_type: wavelength
+  sequence:
+  - 735
+  - 810
+  - 850
+  model_name: gb
+  seeds:
+  - 0
+  - 1
+  - 2
+  n_val_groups: 1
+  n_test_groups: 1
+  n_trials: 10
+  steps:
+  - step_index: 1
+    included_values:
+    - 735
+    mae_by_seed:
+    - seed: 0
+      train: 9.5078964424198
+      val: 9.487188867621803
+      test: 6.288868883051813
+    - seed: 1
+      train: 9.2987501731814
+      val: 5.545723350147418
+      test: 8.441653867550169
+    - seed: 2
+      train: 3.7635360695117694
+      val: 3.3188781346846032
+      test: 11.14904472698389
+    mae_mean:
+      train: 7.523394228370989
+      val: 6.1172634508179415
+      test: 8.626522492528624
+    mae_variance:
+      train: 7.075557047692846
+      val: 6.504671926348613
+      test: 3.9539730765741914
+  - step_index: 2
+    included_values:
+    - 735
+    - 810
+    mae_by_seed:
+    - seed: 0
+      train: 8.175023193105778
+      val: 7.9645082100727365
+      test: 8.949734372461124
+    - seed: 1
+      train: 10.02874253758552
+      val: 5.971867280158738
+      test: 9.402493767333251
+    - seed: 2
+      train: 3.5195458052031587
+      val: 3.12150913595186
+      test: 11.023762609793526
+    mae_mean:
+      train: 7.241103845298152
+      val: 5.685961542061111
+      test: 9.791996916529301
+    mae_variance:
+      train: 7.497709690914246
+      val: 3.9499777175278523
+      test: 0.7927885398255111
+  - step_index: 3
+    included_values:
+    - 735
+    - 810
+    - 850
+    mae_by_seed:
+    - seed: 0
+      train: 10.186671635103165
+      val: 9.762340025877046
+      test: 7.640127359083672
+    - seed: 1
+      train: 9.469803602108808
+      val: 5.67833000504248
+      test: 10.061111091829783
+    - seed: 2
+      train: 3.2841311413934684
+      val: 2.907095261593891
+      test: 11.008611711127838
+    mae_mean:
+      train: 7.646868792868481
+      val: 6.11592176417114
+      test: 9.569950054013765
+    mae_variance:
+      train: 9.602389870587052
+      val: 7.928140070200594
+      test: 2.0117340541953217
+- experiment_id: error_evolution_0003
+  timestamp: '2026-03-30T20:25:46.925352+00:00'
+  dataset: invivo
+  evolution_type: wavelength
+  sequence:
+  - 735
+  - 810
+  - 850
+  model_name: mlp
+  seeds:
+  - 0
+  - 1
+  - 2
+  n_val_groups: 1
+  n_test_groups: 1
+  n_trials: 10
+  steps:
+  - step_index: 1
+    included_values:
+    - 735
+    mae_by_seed:
+    - seed: 0
+      train: 6.110520569237909
+      val: 10.612055043145354
+      test: 4.3807945429931054
+    - seed: 1
+      train: 10.654793109370477
+      val: 4.292002800584214
+      test: 5.859981694521255
+    - seed: 2
+      train: 4.277102113694784
+      val: 0.9266972180855775
+      test: 12.308551621404737
+    mae_mean:
+      train: 7.01413859743439
+      val: 5.276918353938382
+      test: 7.5164426196397
+    mae_variance:
+      train: 7.187419843161315
+      val: 16.11938869019391
+      test: 11.846820113939748
+  - step_index: 2
+    included_values:
+    - 735
+    - 810
+    mae_by_seed:
+    - seed: 0
+      train: 6.002136671210577
+      val: 10.627710518889266
+      test: 4.343723358973465
+    - seed: 1
+      train: 10.569147336792346
+      val: 4.485704367292483
+      test: 6.391411918083676
+    - seed: 2
+      train: 4.299422262513284
+      val: 0.8605247807193795
+      test: 12.342091560259949
+    mae_mean:
+      train: 6.956902090172069
+      val: 5.324646555633709
+      test: 7.692408945772364
+    mae_variance:
+      train: 7.0073639204629545
+      val: 16.25156487167426
+      test: 11.50861228025253
+  - step_index: 3
+    included_values:
+    - 735
+    - 810
+    - 850
+    mae_by_seed:
+    - seed: 0
+      train: 7.011407671054054
+      val: 10.497711407447213
+      test: 4.741626505542778
+    - seed: 1
+      train: 10.577683933351366
+      val: 4.463411083207652
+      test: 6.344934027140878
+    - seed: 2
+      train: 4.41418523872463
+      val: 0.5418854802639473
+      test: 12.511856741954626
+    mae_mean:
+      train: 7.334425614376684
+      val: 5.167669323639604
+      test: 7.866139091546093
+    mae_variance:
+      train: 6.383622988965104
+      val: 16.767734816670572
+      test: 11.219778745127522
+- experiment_id: error_evolution_0004
+  timestamp: '2026-03-31T12:07:50.568063+00:00'
+  dataset: invivo
+  evolution_type: detector_distance
+  sequence:
+  - 15
+  - 30
+  - 100
+  - 75
+  - 45
+  model_name: mlp
+  seeds:
+  - 0
+  - 1
+  - 2
+  n_val_groups: 1
+  n_test_groups: 1
+  n_trials: 10
+  steps:
+  - step_index: 1
+    included_values:
+    - 15
+    mae_by_seed:
+    - seed: 0
+      train: 6.219916229861056
+      val: 10.594106356723286
+      test: 4.420830334272927
+    - seed: 1
+      train: 10.507995167230323
+      val: 4.697166232111353
+      test: 6.898168545150258
+    - seed: 2
+      train: 4.2952389828944275
+      val: 0.8744866632062103
+      test: 12.33936916836178
+    mae_mean:
+      train: 7.007716793328602
+      val: 5.38858641734695
+      test: 7.886122682594988
+    mae_variance:
+      train: 6.743371431567212
+      val: 15.98419876737644
+      test: 10.938569566675952
+  - step_index: 2
+    included_values:
+    - 15
+    - 30
+    mae_by_seed:
+    - seed: 0
+      train: 6.289168271865718
+      val: 10.585155516871538
+      test: 4.44508481109389
+    - seed: 1
+      train: 10.817705967634536
+      val: 4.057783567311522
+      test: 5.064281895083372
+    - seed: 2
+      train: 4.6660655287978345
+      val: 0.1416818329917756
+      test: 12.840240304754168
+    mae_mean:
+      train: 7.257646589432696
+      val: 4.928206972391611
+      test: 7.449869003643809
+    mae_variance:
+      train: 6.776088473920517
+      val: 18.556508883037132
+      test: 14.591952220053933
+  - step_index: 3
+    included_values:
+    - 15
+    - 30
+    - 100
+    mae_by_seed:
+    - seed: 0
+      train: 7.772947422649878
+      val: 10.456657886799434
+      test: 5.0940407624444015
+    - seed: 1
+      train: 10.564291234102372
+      val: 4.500575738729176
+      test: 6.420078797222484
+    - seed: 2
+      train: 4.055252745157875
+      val: 1.729290528179515
+      test: 11.931654876630718
+    mae_mean:
+      train: 7.464163800636708
+      val: 5.562174717902708
+      test: 7.8152581454325345
+    mae_variance:
+      train: 7.108937337705263
+      val: 13.257986365008547
+      test: 8.765423835922567
+  - step_index: 4
+    included_values:
+    - 15
+    - 30
+    - 100
+    - 75
+    mae_by_seed:
+    - seed: 0
+      train: 5.639959757505972
+      val: 10.694910456044553
+      test: 4.218252741945759
+    - seed: 1
+      train: 10.470157399905117
+      val: 4.907934372254234
+      test: 7.382093610425205
+    - seed: 2
+      train: 4.274763025891772
+      val: 0.9383644859151198
+      test: 12.306053766272742
+    mae_mean:
+      train: 6.794960061100954
+      val: 5.5137364380713025
+      test: 7.968800039547901
+    mae_variance:
+      train: 7.064164758911619
+      val: 16.048529616015596
+      test: 11.074199785171052
+  - step_index: 5
+    included_values:
+    - 15
+    - 30
+    - 100
+    - 75
+    - 45
+    mae_by_seed:
+    - seed: 0
+      train: 4.911268405831203
+      val: 10.851729497941275
+      test: 4.022420383763955
+    - seed: 1
+      train: 10.612749272151007
+      val: 4.376572008352759
+      test: 6.111752182768349
+    - seed: 2
+      train: 4.235154329720735
+      val: 1.066469099560353
+      test: 12.244491722222445
+    mae_mean:
+      train: 6.586390669234315
+      val: 5.431590201951463
+      test: 7.459554762918249
+    mae_variance:
+      train: 8.181970173626413
+      val: 16.515085205099126
+      test: 12.175362079979463
+- experiment_id: error_evolution_0005
+  timestamp: '2026-04-01T11:41:35.752604+00:00'
+  dataset: simulation
+  evolution_type: detector_distance
+  sequence:
+  - 70
+  - 90
+  - 50
+  - 30
+  - 10
+  model_name: mlp
+  seeds:
+  - 0
+  - 1
+  - 2
+  n_val_groups: 1
+  n_test_groups: 1
+  n_trials: 10
+  steps:
+  - step_index: 1
+    included_values:
+    - 70
+    mae_by_seed:
+    - seed: 0
+      train: 0.08814178328496113
+      val: 0.03726289089024748
+      test: 0.0851853306197008
+    - seed: 1
+      train: 0.08229830241129721
+      val: 0.015129092737017125
+      test: 0.07217330183266613
+    - seed: 2
+      train: 0.0770172418148402
+      val: 0.019896317316644204
+      test: 0.23804526131721085
+    mae_mean:
+      train: 0.08248577583703286
+      val: 0.02409610031463627
+      test: 0.1318012979231926
+    mae_variance:
+      train: 2.0643476962751916e-05
+      val: 9.046992539643552e-05
+      test: 0.005672108694360516
+  - step_index: 2
+    included_values:
+    - 70
+    - 90
+    mae_by_seed:
+    - seed: 0
+      train: 0.029092435530706107
+      val: 0.010318777029188356
+      test: 0.10244678814470032
+    - seed: 1
+      train: 0.04707931221798211
+      val: 0.002264874836980988
+      test: 0.19492864780771876
+    - seed: 2
+      train: 0.045869461846613266
+      val: 0.013213041565109723
+      test: 0.4191386611291574
+    mae_mean:
+      train: 0.04068040319843383
+      val: 0.008598897810426356
+      test: 0.23883803236052548
+    mae_variance:
+      train: 6.738445365433506e-05
+      val: 2.14560513813822e-05
+      test: 0.01767964076163704
+  - step_index: 3
+    included_values:
+    - 70
+    - 90
+    - 50
+    mae_by_seed:
+    - seed: 0
+      train: 0.08064327057694592
+      val: 0.010186558917580427
+      test: 0.02119862622098939
+    - seed: 1
+      train: 0.08705311505405883
+      val: 0.0035229131954142563
+      test: 0.05850396558581066
+    - seed: 2
+      train: 0.03175583105046581
+      val: 0.011023713817975817
+      test: 0.16218074553351888
+    mae_mean:
+      train: 0.06648407222715685
+      val: 0.0082443953103235
+      test: 0.08062777911343964
+    mae_variance:
+      train: 0.0006098730519833389
+      val: 1.1263001401913266e-05
+      test: 0.0035573912234780334
+  - step_index: 4
+    included_values:
+    - 70
+    - 90
+    - 50
+    - 30
+    mae_by_seed:
+    - seed: 0
+      train: 0.03224783984660611
+      val: 0.003615278085318121
+      test: 0.2732805854499095
+    - seed: 1
+      train: 0.07089045568040152
+      val: 0.008867825738060246
+      test: 0.14692899309299717
+    - seed: 2
+      train: 0.031645851602502176
+      val: 0.00680377934559001
+      test: 0.29809746593032516
+    mae_mean:
+      train: 0.04492804904316994
+      val: 0.006428961056322793
+      test: 0.23943568149107727
+    mae_variance:
+      train: 0.00033708367750615655
+      val: 4.6684538490390694e-06
+      test: 0.004381389958652951
+  - step_index: 5
+    included_values:
+    - 70
+    - 90
+    - 50
+    - 30
+    - 10
+    mae_by_seed:
+    - seed: 0
+      train: 0.1112402121225993
+      val: 0.11124021212259928
+      test: 0.11124021212259928
+    - seed: 1
+      train: 0.03985653078761829
+      val: 0.003625312215888339
+      test: 0.1473379546681876
+    - seed: 2
+      train: 0.05734565150838149
+      val: 0.020790712123844906
+      test: 0.16209387223797955
+    mae_mean:
+      train: 0.06948079813953302
+      val: 0.04521874548744417
+      test: 0.1402240130095888
+    mae_variance:
+      train: 0.0009229025520354601
+      val: 0.0022285255206617952
+      test: 0.00045631987414941

@@ -1,0 +1,138 @@
+invivo:
+  features:
+    - ratio_ch1_wv1
+    - ratio_ch2_wv1
+    - ratio_ch3_wv1
+    - ratio_ch4_wv1
+    - ratio_ch5_wv1
+    - ratio_ch1_wv2
+    - ratio_ch2_wv2
+    - ratio_ch3_wv2
+    - ratio_ch4_wv2
+    - ratio_ch5_wv2
+    - ratio_ch1_wv3
+    - ratio_ch2_wv3
+    - ratio_ch3_wv3
+    - ratio_ch4_wv3
+    - ratio_ch5_wv3
+  labels:
+    - fSaO2
+  detector_distances:
+    - 15
+    - 30
+    - 45
+    - 75
+    - 100
+    - 15
+    - 30
+    - 45
+    - 75
+    - 100
+    - 15
+    - 30
+    - 45
+    - 75
+    - 100
+  wavelength:
+    - 735
+    - 735
+    - 735
+    - 735
+    - 735
+    - 850
+    - 850
+    - 850
+    - 850
+    - 850
+    - 810
+    - 810
+    - 810
+    - 810
+    - 810
+  # grouping_col: experiment_id
+  grouping_col: validation_idx
+  ignored_group: z
+
+simulation:
+  features:
+    - epr_d1_wv690
+    - epr_d3_wv690
+    - epr_d5_wv690
+    - epr_d7_wv690
+    - epr_d9_wv690
+    - epr_d1_wv735
+    - epr_d3_wv735
+    - epr_d5_wv735
+    - epr_d7_wv735
+    - epr_d9_wv735
+    - epr_d1_wv810
+    - epr_d3_wv810
+    - epr_d5_wv810
+    - epr_d7_wv810
+    - epr_d9_wv810
+    - epr_d1_wv850
+    - epr_d3_wv850
+    - epr_d5_wv850
+    - epr_d7_wv850
+    - epr_d9_wv850
+    - epr_d1_wv910
+    - epr_d3_wv910
+    - epr_d5_wv910
+    - epr_d7_wv910
+    - epr_d9_wv910
+  labels:
+    - fetal_saturation
+
+  detector_distances:
+    - 10
+    - 30
+    - 50
+    - 70
+    - 90
+    - 10
+    - 30
+    - 50
+    - 70
+    - 90
+    - 10
+    - 30
+    - 50
+    - 70
+    - 90
+    - 10
+    - 30
+    - 50
+    - 70
+    - 90
+    - 10
+    - 30
+    - 50
+    - 70
+    - 90
+  wavelength:
+    - 690
+    - 690
+    - 690
+    - 690
+    - 690
+    - 735
+    - 735
+    - 735
+    - 735
+    - 735
+    - 810
+    - 810
+    - 810
+    - 810
+    - 810
+    - 850
+    - 850
+    - 850
+    - 850
+    - 850
+    - 910
+    - 910
+    - 910
+    - 910
+    - 910
+  grouping_col: fetal_saturation
