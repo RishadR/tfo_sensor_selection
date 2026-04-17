@@ -71,4 +71,7 @@ Thumbs.db
 *.log
 
 # models
-models/
+# Keep outer models directory structure, but ignore files inside it.
+/models/**
+!/models/**/
+!/models/**/.gitkeep
