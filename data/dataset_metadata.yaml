@@ -135,4 +135,4 @@ simulation:
     - 910
     - 910
     - 910
-  grouping_col: fetal_saturation
+  grouping_col: maternal_saturation

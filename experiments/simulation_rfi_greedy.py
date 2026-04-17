@@ -54,6 +54,7 @@ def run_simulation_rfi_greedy(
         rfi_mode="mean",
         rfi_split=rfi_split,
         synthesize_count=synthesize_count,
+        n_jobs_synthesize=n_job_synthesize,
     )
     distance_run = run_greedy_group_selection(
         model_contexts=model_contexts,
@@ -65,6 +66,7 @@ def run_simulation_rfi_greedy(
         rfi_mode="mean",
         rfi_split=rfi_split,
         synthesize_count=synthesize_count,
+        n_jobs_synthesize=n_job_synthesize,
     )
 
     if record_rfi_csv:
@@ -92,8 +94,8 @@ if __name__ == "__main__":
         model_name="mlp",
         generator_name="arf",
         rfi_split="test",
-        synthesize_count=30,
-        n_job_synthesize=30,
+        synthesize_count=3,
+        n_job_synthesize=3,
     )
     print("Experiment: simulation_rfi_greedy")
     print(f"Seed: {result['seed']}")

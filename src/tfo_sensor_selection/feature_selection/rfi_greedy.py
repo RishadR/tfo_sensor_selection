@@ -18,6 +18,11 @@ RFIMode = Literal["mean", "per_sample"]
 RFISplit = Literal["train", "val", "test", "all"]
 
 
+_SYNTH_WORKER_RUN_CONTEXTS: list[dict[str, Any]] | None = None
+_SYNTH_WORKER_SOURCE_COLUMNS: list[str] | None = None
+_SYNTH_WORKER_FEATURE_NAMES: list[str] | None = None
+
+
 def _validate_feature_alignment(cfg: DatasetConfig) -> None:
     n_features = len(cfg.features)
     if len(cfg.wavelength) != n_features:
@@ -129,6 +134,36 @@ def _synthesize_one(
     return float(np.mean(per_ctx_rfi)), float(np.mean(per_ctx_synth_mae))
 
 
+def _init_synthesize_worker(
+    run_contexts: list[dict[str, Any]],
+    source_columns: list[str],
+    feature_names: list[str],
+) -> None:
+    global _SYNTH_WORKER_RUN_CONTEXTS, _SYNTH_WORKER_SOURCE_COLUMNS, _SYNTH_WORKER_FEATURE_NAMES
+    _SYNTH_WORKER_RUN_CONTEXTS = run_contexts
+    _SYNTH_WORKER_SOURCE_COLUMNS = source_columns
+    _SYNTH_WORKER_FEATURE_NAMES = feature_names
+
+
+def _synthesize_one_worker(task: tuple[int, list[str], list[str]]) -> tuple[float, float]:
+    synth_idx, conditioned_feature_names, target_feature_names = task
+    if (
+        _SYNTH_WORKER_RUN_CONTEXTS is None
+        or _SYNTH_WORKER_SOURCE_COLUMNS is None
+        or _SYNTH_WORKER_FEATURE_NAMES is None
+    ):
+        raise RuntimeError("Synthesis worker was not initialized")
+
+    return _synthesize_one(
+        synth_idx=synth_idx,
+        run_contexts=_SYNTH_WORKER_RUN_CONTEXTS,
+        source_columns=_SYNTH_WORKER_SOURCE_COLUMNS,
+        feature_names=_SYNTH_WORKER_FEATURE_NAMES,
+        conditioned_feature_names=conditioned_feature_names,
+        target_feature_names=target_feature_names,
+    )
+
+
 def run_greedy_group_selection(
     model_contexts: Sequence[Any],
     grouping_type: GroupingType,
@@ -141,6 +176,7 @@ def run_greedy_group_selection(
     rfi_split: RFISplit = "test",
     synthesize_count: int = 1,
     n_jobs_synthesize: int = 1,
+    verbose: bool = True,
 ) -> dict[str, Any]:
     """
     Run greedy RFI-based group selection.  
@@ -162,6 +198,7 @@ def run_greedy_group_selection(
                          Results are aggregated as mean and variance across redraws.
         n_jobs_synthesize: Number of parallel jobs to use for synthesizing data and computing RFI across multiple 
         model contexts. Only applicable if synthesize_count > 1.
+        verbose: Whether to print verbose logs during selection process.
     """
     
     if len(model_contexts) == 0:
@@ -179,6 +216,8 @@ def run_greedy_group_selection(
             raise ValueError("All model contexts must share the same feature_names")
 
     run_contexts: list[dict[str, Any]] = []
+    if verbose:
+        print(f"Creating ARF generators for seeds: {sorted(set(ctx.seed for ctx in model_contexts))}")
     for model_context in model_contexts:
         split_df, x_split, y_split, baseline_split_mae = _get_split_payload(
             model_context=model_context,
@@ -207,6 +246,8 @@ def run_greedy_group_selection(
                 "generator": generator,
             }
         )
+        if verbose:
+            print(f"Prepared generator for model {model_context.model_name} with seed {model_context.seed} and baseline {rfi_split} MAE {baseline_split_mae:.4f}")
 
     baseline_split_mae = float(np.mean([ctx["baseline_split_mae"] for ctx in run_contexts]))
     source_columns = [label_name] + feature_names
@@ -218,100 +259,111 @@ def run_greedy_group_selection(
     model_names = {ctx["model_context"].model_name for ctx in run_contexts}
     run_model_name = ref_result.model_name if len(model_names) == 1 else "multi_model"
 
-    for round_index in range(1, len(remaining_group_values) + 1):
-        conditioned_feature_names = _flatten_selected_features(selected_group_values, group_to_features)
-        candidate_rows: list[dict[str, Any]] = []
+    worker_count = max(1, min(n_jobs_synthesize, synthesize_count))
+    executor: ProcessPoolExecutor | None = None
+    if worker_count > 1:
+        # Keep one pool for the full run and initialize large immutable worker state once.
+        executor = ProcessPoolExecutor(
+            max_workers=worker_count,
+            initializer=_init_synthesize_worker,
+            initargs=(run_contexts, source_columns, feature_names),
+        )
+        if verbose:
+            print(f"Using {worker_count} parallel synthesis workers")
 
-        for candidate_group_value in remaining_group_values:
-            target_feature_names = list(group_to_features[candidate_group_value])
+    try:
+        for round_index in range(1, len(remaining_group_values) + 1):
+            if verbose:
+                print(f"Starting RFI round {round_index} with remaining groups: {remaining_group_values}")
+            conditioned_feature_names = _flatten_selected_features(selected_group_values, group_to_features)
+            candidate_rows: list[dict[str, Any]] = []
 
-            # Collect RFI and synthesized errors across multiple synthesizations and models
-            per_synthesize_rfi: list[float] = []
-            per_synthesize_synth_mae: list[float] = []
+            for candidate_group_value in remaining_group_values:
+                target_feature_names = list(group_to_features[candidate_group_value])
 
-            worker_count = min(n_jobs_synthesize, synthesize_count)
-            if worker_count <= 1:
-                for synth_idx in range(synthesize_count):
-                    rfi, synth_mae = _synthesize_one(
-                        synth_idx,
-                        run_contexts,
-                        source_columns,
-                        feature_names,
-                        conditioned_feature_names,
-                        target_feature_names,
-                    )
-                    per_synthesize_rfi.append(rfi)
-                    per_synthesize_synth_mae.append(synth_mae)
-            else:
-                with ProcessPoolExecutor(max_workers=worker_count) as executor:
-                    futures = {
-                        executor.submit(
-                            _synthesize_one,
+                # Collect RFI and synthesized errors across multiple synthesizations and models
+                per_synthesize_rfi: list[float] = []
+                per_synthesize_synth_mae: list[float] = []
+
+                if executor is None:
+                    for synth_idx in range(synthesize_count):
+                        rfi, synth_mae = _synthesize_one(
                             synth_idx,
                             run_contexts,
                             source_columns,
                             feature_names,
                             conditioned_feature_names,
                             target_feature_names,
-                        ): synth_idx
+                        )
+                        per_synthesize_rfi.append(rfi)
+                        per_synthesize_synth_mae.append(synth_mae)
+                else:
+                    futures = [
+                        executor.submit(
+                            _synthesize_one_worker,
+                            (synth_idx, conditioned_feature_names, target_feature_names),
+                        )
                         for synth_idx in range(synthesize_count)
-                    }
+                    ]
                     for future in as_completed(futures):
                         rfi, synth_mae = future.result()
                         per_synthesize_rfi.append(rfi)
                         per_synthesize_synth_mae.append(synth_mae)
 
-            # Compute aggregate statistics across synthesizations
-            rfi_mean = float(np.mean(per_synthesize_rfi))
-            rfi_variance = float(np.var(per_synthesize_rfi))
-            synth_split_mae_mean = float(np.mean(per_synthesize_synth_mae))
+                # Compute aggregate statistics across synthesizations
+                rfi_mean = float(np.mean(per_synthesize_rfi))
+                rfi_variance = float(np.var(per_synthesize_rfi))
+                synth_split_mae_mean = float(np.mean(per_synthesize_synth_mae))
 
-            train_mae = float(np.mean([ctx["model_context"].maes["train"] for ctx in run_contexts]))
-            val_mae = float(np.mean([ctx["model_context"].maes["val"] for ctx in run_contexts]))
-            test_mae = float(np.mean([ctx["model_context"].maes["test"] for ctx in run_contexts]))
+                train_mae = float(np.mean([ctx["model_context"].maes["train"] for ctx in run_contexts]))
+                val_mae = float(np.mean([ctx["model_context"].maes["val"] for ctx in run_contexts]))
+                test_mae = float(np.mean([ctx["model_context"].maes["test"] for ctx in run_contexts]))
 
-            candidate_rows.append(
-                {
-                    "dataset": ref_result.dataset,
-                    "model_name": run_model_name,
-                    "seed": int(seed),
-                    "generator_name": generator_name,
-                    "grouping_type": grouping_type,
-                    "rfi_mode": rfi_mode,
-                    "rfi_split": rfi_split,
-                    "round_index": int(round_index),
-                    "candidate_group_value": int(candidate_group_value),
-                    "candidate_group_features": target_feature_names,
-                    "conditioned_group_values": list(selected_group_values),
-                    "conditioned_features": list(conditioned_feature_names),
-                    "synthesized_split_mae": synth_split_mae_mean,
-                    "baseline_split_mae": float(baseline_split_mae),
-                    "rfi_mean": rfi_mean,
-                    "rfi_variance": rfi_variance,
-                    "per_sample_rfi": None,
-                    "baseline_absolute_errors": None,
-                    "synthesized_absolute_errors": None,
-                    "selected_group_value": None,
-                    "selected_in_round": False,
-                    "selected_order": [],
-                    "train_mae": train_mae,
-                    "val_mae": val_mae,
-                    "test_mae": test_mae,
-                }
-            )
+                candidate_rows.append(
+                    {
+                        "dataset": ref_result.dataset,
+                        "model_name": run_model_name,
+                        "seed": int(seed),
+                        "generator_name": generator_name,
+                        "grouping_type": grouping_type,
+                        "rfi_mode": rfi_mode,
+                        "rfi_split": rfi_split,
+                        "round_index": int(round_index),
+                        "candidate_group_value": int(candidate_group_value),
+                        "candidate_group_features": target_feature_names,
+                        "conditioned_group_values": list(selected_group_values),
+                        "conditioned_features": list(conditioned_feature_names),
+                        "synthesized_split_mae": synth_split_mae_mean,
+                        "baseline_split_mae": float(baseline_split_mae),
+                        "rfi_mean": rfi_mean,
+                        "rfi_variance": rfi_variance,
+                        "per_sample_rfi": None,
+                        "baseline_absolute_errors": None,
+                        "synthesized_absolute_errors": None,
+                        "selected_group_value": None,
+                        "selected_in_round": False,
+                        "selected_order": [],
+                        "train_mae": train_mae,
+                        "val_mae": val_mae,
+                        "test_mae": test_mae,
+                    }
+                )
 
-        # Largest RFI wins. Tie-breaker: smallest group value for deterministic behavior.
-        selected_row = sorted(candidate_rows, key=lambda row: (-float(row["rfi_mean"]), int(row["candidate_group_value"])))[0]
-        selected_group_value = int(selected_row["candidate_group_value"])
-        selected_group_values.append(selected_group_value)
-        remaining_group_values = [value for value in remaining_group_values if value != selected_group_value]
+            # Largest RFI wins. Tie-breaker: smallest group value for deterministic behavior.
+            selected_row = sorted(candidate_rows, key=lambda row: (-float(row["rfi_mean"]), int(row["candidate_group_value"]))) [0]
+            selected_group_value = int(selected_row["candidate_group_value"])
+            selected_group_values.append(selected_group_value)
+            remaining_group_values = [value for value in remaining_group_values if value != selected_group_value]
 
-        for row in candidate_rows:
-            row["selected_group_value"] = selected_group_value
-            row["selected_in_round"] = int(row["candidate_group_value"]) == selected_group_value
-            row["selected_order"] = list(selected_group_values)
+            for row in candidate_rows:
+                row["selected_group_value"] = selected_group_value
+                row["selected_in_round"] = int(row["candidate_group_value"]) == selected_group_value
+                row["selected_order"] = list(selected_group_values)
 
-        round_rows.extend(candidate_rows)
+            round_rows.extend(candidate_rows)
+    finally:
+        if executor is not None:
+            executor.shutdown(wait=True)
 
     return {
         "dataset": ref_result.dataset,

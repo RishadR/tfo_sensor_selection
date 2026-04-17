@@ -1,5 +1,6 @@
 import re
 import yaml
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Literal
 
@@ -7,12 +8,37 @@ import numpy as np
 import pandas as pd
 
 from tfo_sensor_selection.config import DatasetConfig, DatasetName, load_metadata
+from tfo_sensor_selection.data.loader import load_dataset
+from tfo_sensor_selection.data.splitter import holdout_split
 from tfo_sensor_selection.models import ModelName
-from tfo_sensor_selection.results import PretrainedSeedContext, load_pretrained_seed_contexts
+from tfo_sensor_selection.results import load_trained_model_artifact
 from tfo_sensor_selection.training.trainer import compute_mae
 
 
 EvolutionType = Literal["wavelength", "detector_distance"]
+
+
+@dataclass(frozen=True)
+class SeedEvaluationContext:
+	seed: int
+	n_val_groups: int
+	n_test_groups: int
+	feature_names: list[str]
+	label_name: str
+	transform: Any
+	model: Any
+	train_df: pd.DataFrame
+	val_df: pd.DataFrame
+	test_df: pd.DataFrame
+	y_train: np.ndarray
+	y_val: np.ndarray
+	y_test: np.ndarray
+
+
+def _to_xy(df: pd.DataFrame, features: list[str], label: str) -> tuple[np.ndarray, np.ndarray]:
+	x = df[features].to_numpy(dtype=float)
+	y = df[label].to_numpy(dtype=float)
+	return x, y
 
 
 def _build_group_to_features(cfg: DatasetConfig, evolution_type: EvolutionType) -> dict[int, list[str]]:
@@ -84,6 +110,128 @@ def record_error_evolution_alt_result(
 	results_df.to_csv(out, index=False)
 
 
+def _discover_seeds_from_artifacts(
+	dataset_name: DatasetName,
+	model_name: ModelName,
+	artifacts_dir: str | Path,
+) -> list[int]:
+	base = Path(artifacts_dir)
+	pattern = re.compile(
+		rf"^{re.escape(str(dataset_name))}_{re.escape(str(model_name))}_seed(\d+)\.pkl$"
+	)
+	seeds = []
+	for path in base.glob(f"{dataset_name}_{model_name}_seed*.pkl"):
+		match = pattern.match(path.name)
+		if match:
+			seeds.append(int(match.group(1)))
+	if not seeds:
+		raise FileNotFoundError(
+			f"No trained model artifacts found for dataset='{dataset_name}', "
+			f"model='{model_name}' in '{base}'"
+		)
+	return sorted(seeds)
+
+
+def _artifact_path_for_seed(
+	seed_value: int,
+	dataset_name: DatasetName,
+	model_name: ModelName,
+	artifacts_dir: str | Path,
+) -> Path:
+	return Path(artifacts_dir) / f"{dataset_name}_{model_name}_seed{seed_value}.pkl"
+
+
+def _load_seed_context(
+	seed_value: int,
+	dataset_name: DatasetName,
+	model_name: ModelName,
+	artifacts_dir: str | Path,
+	cfg: DatasetConfig,
+	df: pd.DataFrame,
+) -> SeedEvaluationContext:
+	artifact_path = _artifact_path_for_seed(
+		seed_value=seed_value,
+		dataset_name=dataset_name,
+		model_name=model_name,
+		artifacts_dir=artifacts_dir,
+	)
+	artifact = load_trained_model_artifact(artifact_path)
+
+	if artifact.dataset != str(dataset_name):
+		raise ValueError(
+			f"Artifact dataset mismatch for seed {seed_value}: "
+			f"expected {dataset_name}, found {artifact.dataset}"
+		)
+	if artifact.model_name != model_name:
+		raise ValueError(
+			f"Artifact model mismatch for seed {seed_value}: "
+			f"expected {model_name}, found {artifact.model_name}"
+		)
+	if artifact.seed != int(seed_value):
+		raise ValueError(
+			f"Artifact seed mismatch for seed {seed_value}: "
+			f"expected {seed_value}, found {artifact.seed}"
+		)
+
+	n_val_groups = artifact.n_val_groups
+	n_test_groups = artifact.n_test_groups
+
+	train_df, val_df, test_df = holdout_split(
+		df=df,
+		grouping_col=cfg.grouping_col,
+		n_val_groups=n_val_groups,
+		n_test_groups=n_test_groups,
+		val_start_idx=seed_value,
+		ignored_group=cfg.ignored_group,
+	)
+
+	feature_names = list(artifact.feature_names)
+	label_name = str(artifact.label_name)
+
+	_, y_train = _to_xy(train_df, feature_names, label_name)
+	_, y_val = _to_xy(val_df, feature_names, label_name)
+	_, y_test = _to_xy(test_df, feature_names, label_name)
+
+	return SeedEvaluationContext(
+		seed=seed_value,
+		n_val_groups=n_val_groups,
+		n_test_groups=n_test_groups,
+		feature_names=feature_names,
+		label_name=label_name,
+		transform=artifact.transform,
+		model=artifact.model,
+		train_df=train_df,
+		val_df=val_df,
+		test_df=test_df,
+		y_train=y_train,
+		y_val=y_val,
+		y_test=y_test,
+	)
+
+
+def load_pretrained_seed_contexts(
+	dataset_name: DatasetName,
+	model_name: ModelName,
+	artifacts_dir: str | Path = "models/trained",
+) -> dict[int, SeedEvaluationContext]:
+	seeds = _discover_seeds_from_artifacts(
+		dataset_name=dataset_name,
+		model_name=model_name,
+		artifacts_dir=artifacts_dir,
+	)
+	cfg = load_metadata(dataset_name)
+	df = load_dataset(cfg)
+	contexts: dict[int, SeedEvaluationContext] = {}
+	for seed_value in seeds:
+		contexts[seed_value] = _load_seed_context(
+			seed_value=seed_value,
+			dataset_name=dataset_name,
+			model_name=model_name,
+			artifacts_dir=artifacts_dir,
+			cfg=cfg,
+			df=df,
+		)
+	return contexts
 
 
 def run_error_evolution_alt(
@@ -93,9 +241,10 @@ def run_error_evolution_alt(
 	model_name: ModelName,
 	method_name: str,
 	selection_strategy: str,
+	n_trials: int = 20,
 	record_csv: bool = True,
 	output_path: str | Path = "results/error_evolution.csv",
-	pretrained_results: dict[int, PretrainedSeedContext] | None = None,
+	pretrained_results: dict[int, SeedEvaluationContext] | None = None,
 	artifacts_dir: str | Path = "models/trained",
 ) -> pd.DataFrame:
 	"""
@@ -124,8 +273,8 @@ def run_error_evolution_alt(
 		seed_context = seed_contexts[seed_value]
 		all_features = list(seed_context.feature_names)
 
-		# Compute per-feature training means for masking - use both train and validation to get the mean
-		feature_means = {f: float(pd.concat([seed_context.train_df[f], seed_context.val_df[f]]).mean()) for f in all_features}
+		# Compute per-feature training means for masking
+		feature_means = {f: float(seed_context.train_df[f].mean()) for f in all_features}
 
 		# Evaluate each stage with uninformative features masked
 		for step_idx in range(len(resolved_sequence)):
@@ -159,6 +308,7 @@ def run_error_evolution_alt(
 					"model_name": str(model_name),
 					"n_val_groups": int(seed_context.n_val_groups),
 					"n_test_groups": int(seed_context.n_test_groups),
+					"n_trials": int(n_trials),
 					"train_error": train_mae,
 					"val_error": val_mae,
 					"test_error": test_mae,
@@ -181,6 +331,7 @@ def run_error_evolution_alt(
 			"model_name",
 			"n_val_groups",
 			"n_test_groups",
+			"n_trials",
 			"train_error",
 			"val_error",
 			"test_error",
@@ -200,6 +351,7 @@ if __name__ == "__main__":
 		"invivo": "invivo",
 	}
 	MODEL_NAME = "mlp"
+	N_TRIALS = 30
 	ARTIFACTS_DIR = Path("models/trained")
 
 	with SEQUENCES_PATH.open("r") as fh:
@@ -227,6 +379,7 @@ if __name__ == "__main__":
 					method_name="MeanMask",
 					selection_strategy=strategy_name,
 					sequence=[int(v) for v in sequence],
+					n_trials=N_TRIALS,
 					artifacts_dir=ARTIFACTS_DIR,
 					record_csv=False,
 					pretrained_results=shared_models,

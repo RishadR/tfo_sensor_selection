@@ -48,9 +48,9 @@ simulated:
       - 810
     OURS:
       - 690
-      - 910
       - 735
       - 850
+      - 910
       - 810
 
   detector_distance:
@@ -70,6 +70,6 @@ simulated:
       - 70
       - 90
       - 50
-      - 30
       - 10
+      - 30
 

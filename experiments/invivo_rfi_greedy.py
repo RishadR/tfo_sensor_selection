@@ -19,6 +19,7 @@ def run_invivo_rfi_greedy(
     rfi_split: RFISplit = "test",
     seed: list[int] | None = None,
     synthesize_count: int = 1,
+    n_job_synthesize: int = 1,
     record_rfi_csv: bool = True,
     rfi_output_path: str | Path = "results/invivo_rfi_greedy_results.csv",
     artifacts_dir: str | Path = "models/trained",
@@ -53,6 +54,7 @@ def run_invivo_rfi_greedy(
         rfi_mode="mean",
         rfi_split=rfi_split,
         synthesize_count=synthesize_count,
+        n_jobs_synthesize=n_job_synthesize,
     )
     distance_run = run_greedy_group_selection(
         model_contexts=model_contexts,
@@ -64,6 +66,7 @@ def run_invivo_rfi_greedy(
         rfi_mode="mean",
         rfi_split=rfi_split,
         synthesize_count=synthesize_count,
+        n_jobs_synthesize=n_job_synthesize,
     )
 
     if record_rfi_csv:
@@ -92,6 +95,7 @@ if __name__ == "__main__":
         generator_name="arf",
         rfi_split="test",
         synthesize_count=50,
+        n_job_synthesize=8,
     ) 
     print("Experiment: invivo_rfi_greedy")
     print(f"Seed: {result['seed']}")
