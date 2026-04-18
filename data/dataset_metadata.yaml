@@ -49,9 +49,9 @@ invivo:
     - 810
     - 810
     - 810
-  # grouping_col: experiment_id
-  grouping_col: validation_idx
-  ignored_group: z
+  grouping_col: experiment_id
+  # grouping_col: validation_idx
+  # ignored_group: z
 
 simulation:
   features:
