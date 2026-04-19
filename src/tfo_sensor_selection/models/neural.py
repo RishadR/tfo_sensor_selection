@@ -5,6 +5,9 @@ import importlib
 from typing import Any
 
 import numpy as np
+import torch
+import torch.nn as nn
+from torch.utils.data import TensorDataset, DataLoader
 
 from tfo_sensor_selection.models.base import BaseModel
 
@@ -18,8 +21,9 @@ class _NNParams:
 
 
 class MLPModel(BaseModel):
-    def __init__(self, seed: int = 42, **kwargs: Any) -> None:
+    def __init__(self, seed: int = 42, device: str = "cpu", **kwargs: Any) -> None:
         self.seed = seed
+        self.device = torch.device(device)
         self.params = _NNParams(**{k: v for k, v in kwargs.items() if hasattr(_NNParams, k)})
         self._net = None
 
@@ -39,12 +43,6 @@ class MLPModel(BaseModel):
         return self
 
     def _build_net(self, input_dim: int):
-        try:
-            torch = importlib.import_module("torch")
-            nn = torch.nn
-        except Exception as exc:
-            raise ImportError("PyTorch is required for neural_network model") from exc
-
         torch.manual_seed(self.seed)
         hidden = self.params.hidden_size
         net = nn.Sequential(
@@ -56,18 +54,10 @@ class MLPModel(BaseModel):
             nn.ReLU(),
             nn.Linear(hidden, 1),
         )
+        net = net.to(self.device)
         return net
 
     def fit(self, x: np.ndarray, y: np.ndarray) -> "MLPModel":
-        try:
-            torch = importlib.import_module("torch")
-            nn = torch.nn
-            data_utils = importlib.import_module("torch.utils.data")
-            DataLoader = data_utils.DataLoader
-            TensorDataset = data_utils.TensorDataset
-        except Exception as exc:
-            raise ImportError("PyTorch is required for neural_network model") from exc
-
         x = np.asarray(x, dtype=np.float32)
         y = np.asarray(y, dtype=np.float32).reshape(-1, 1)
 
@@ -75,8 +65,9 @@ class MLPModel(BaseModel):
         optimizer = torch.optim.Adam(net.parameters(), lr=self.params.lr)
         loss_fn = nn.L1Loss()
 
-        dataset = TensorDataset(torch.from_numpy(x), torch.from_numpy(y))
-        loader = DataLoader(dataset, batch_size=self.params.batch_size, shuffle=True)
+        dataset = TensorDataset(torch.from_numpy(x).to(self.device), torch.from_numpy(y).to(self.device))
+        loader = DataLoader(dataset, batch_size=self.params.batch_size, shuffle=True)   
+
 
         net.train()
         for _ in range(self.params.epochs):
@@ -94,13 +85,8 @@ class MLPModel(BaseModel):
         if self._net is None:
             raise RuntimeError("Model has not been fit yet")
 
-        try:
-            torch = importlib.import_module("torch")
-        except Exception as exc:
-            raise ImportError("PyTorch is required for neural_network model") from exc
-
         x = np.asarray(x, dtype=np.float32)
         self._net.eval()
         with torch.no_grad():
-            pred = self._net(torch.from_numpy(x)).cpu().numpy().reshape(-1)
+            pred = self._net(torch.from_numpy(x).to(self.device)).cpu().numpy().reshape(-1)
         return pred.astype(float)

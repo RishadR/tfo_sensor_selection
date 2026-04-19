@@ -16,14 +16,14 @@ ModelName = Literal[
 ]
 
 
-def build_model(model_name: ModelName, seed: int = 42) -> BaseModel:
+def build_model(model_name: ModelName, seed: int = 42, device: str = "cpu") -> BaseModel:
     name = model_name.lower()
     if name in {"random_forest", "rf"}:
         return RandomForestModel(random_state=seed)
     if name in {"gradient_boosting", "gb"}:
         return GradientBoostingModel(random_state=seed)
     if name in {"neural_network", "mlp", "nn"}:
-        return MLPModel(seed=seed)
+        return MLPModel(seed=seed, device=device)
     raise KeyError(f"Unknown model_name '{model_name}'")
 
 

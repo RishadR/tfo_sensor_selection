@@ -61,6 +61,7 @@ def run_pipeline(
     seed: int = 42,
     record_results: bool = True,
     search_space_fn: SearchSpaceFn | None = None,
+    device: str = "cpu"
 ) -> PipelineResult:
     """
     Run the full training pipeline: load data, split, transform, train model, and evaluate.
@@ -78,6 +79,7 @@ def run_pipeline(
         seed: The random seed for reproducibility
         record_results: Whether to record the results of the pipeline run to a CSV file
         search_space_fn: Optional Optuna search-space callback that overrides the model defaults
+        device: The device to use for training (e.g., "cpu" or "cuda" or "mps") - only valid for mlp models
 
     Returns:
         A PipelineResult object containing the trained model, data splits, and evaluation metrics
@@ -124,7 +126,7 @@ def run_pipeline(
     x_train_val = np.concatenate([x_train, x_val], axis=0)
     y_train_val = np.concatenate([y_train, y_val], axis=0)
 
-    model = build_model(model_name, seed=seed)
+    model = build_model(model_name, seed=seed, device=device)
     model.set_params(**best_params)
     model.fit(x_train_val, y_train_val)
 

@@ -71,6 +71,7 @@ def _compute_error_evolution_step(
     n_test_groups: int,
     n_trials: int,
     transforms: list[BaseTransform] | None,
+    device: str = "cpu",
 ) -> dict[str, Any]:
     selected_values = resolved_sequence[: step_idx + 1]
     selected_features = _flatten_features(selected_values, grouped)
@@ -87,6 +88,7 @@ def _compute_error_evolution_step(
             transforms=transforms,
             seed=seed_value,
             record_results=False,
+            device=device,
         )
 
         train_mae = float(pipeline_result.maes["train"])
@@ -142,6 +144,7 @@ def run_error_evolution(
     n_test_groups: int = 1,
     n_trials: int = 20,
     transforms: list[BaseTransform] | None = None,
+    device: str = "cpu",
     record_csv: bool = True,
     output_path: str | Path = "results/error_evolution.csv",
 ) -> None:
@@ -176,6 +179,7 @@ def run_error_evolution(
                 n_trials=n_trials,
                 transforms=transforms,
                 evolution_type=evolution_type,
+                device=device
             )
             all_rows.extend(row["rows"])
     else:
@@ -194,6 +198,7 @@ def run_error_evolution(
                     n_test_groups,
                     n_trials,
                     transforms,
+                    device=device
                 ): step_idx
                 for step_idx in range(step_count)
             }
@@ -245,4 +250,5 @@ if __name__ == "__main__":
         n_val_groups=1,
         n_test_groups=1,
         n_trials=30,
+        device="mps"
     )
