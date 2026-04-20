@@ -16,7 +16,7 @@ from tfo_sensor_selection.data.loader import load_dataset
 EvolutionType = Literal["wavelength", "detector_distance"]
 SEQUENCE_DATASET_TO_METADATA_DATASET: dict[str, DatasetName] = {
 	"invivo": "invivo",
-	"simulated": "simulation",
+	"simulation": "simulation",
 }
 
 

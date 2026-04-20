@@ -347,7 +347,7 @@ def run_error_evolution_alt(
 if __name__ == "__main__":
 	SEQUENCES_PATH = Path("data/sequences.yaml")
 	DATASET_KEY_MAP: dict[str, DatasetName] = {
-		"simulated": "simulation",
+		"simulation": "simulation",
 		"invivo": "invivo",
 	}
 	MODEL_NAME = "mlp"
@@ -359,7 +359,7 @@ if __name__ == "__main__":
 
 	all_results: list[pd.DataFrame] = []
 
-	for yaml_dataset_key, dataset_name in DATASET_KEY_MAP.items():
+	for yaml_dataset_key, dataset_name in ['simulation', 'invivo']:
 		for evolution_type, strategies in sequences_cfg[yaml_dataset_key].items():
 			# Load once per (dataset, evolution_type) combo — seeds discovered from disk
 			print(f"Loading models for {dataset_name} / {evolution_type} ...")

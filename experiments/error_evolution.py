@@ -18,7 +18,7 @@ EvolutionType = Literal["wavelength", "detector_distance"]
 SEQUENCES_PATH = Path("data/sequences.yaml")
 DATASET_KEY_MAP: dict[DatasetName, str] = {
     "invivo": "invivo",
-    "simulation": "simulated",
+    "simulation": "simulation",
 }
 
 
@@ -310,14 +310,14 @@ if __name__ == "__main__":
     run_error_evolution(
         # dataset_name="invivo",
         dataset_name="simulation",
-        evolution_type="detector_distance",
-        # evolution_type="wavelength",
+        # evolution_type="detector_distance",
+        evolution_type="wavelength",
         model_name="mlp",
         n_jobs_steps=5,
         seeds=[0, 1, 2, 3, 4],
         n_val_groups=1,
         n_test_groups=1,
         n_trials=30,
-        n_jobs=20,
-        device="mps",
+        n_jobs=30,
+        device="cuda",
     )

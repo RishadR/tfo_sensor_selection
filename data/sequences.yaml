@@ -32,7 +32,7 @@ invivo:
       - 100
       - 75
 
-simulated:
+simulation:
   wavelength:
     SAGE:
       - 910
