@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any, Literal
@@ -197,6 +198,47 @@ def record_error_evolution_result(
         results_df.to_csv(out, index=False)
 
 
+def _parse_stage_values(raw_sequence: Any) -> frozenset[int]:
+    if isinstance(raw_sequence, str):
+        parsed = ast.literal_eval(raw_sequence)
+    else:
+        parsed = raw_sequence
+
+    if not isinstance(parsed, list):
+        raise ValueError(f"Invalid current_sequence value: {raw_sequence!r}")
+
+    return frozenset(int(value) for value in parsed)
+
+
+def _load_completed_stages(
+    output_path: str | Path,
+    dataset_name: DatasetName,
+    evolution_type: EvolutionType,
+) -> set[frozenset[int]]:
+    out = Path(output_path)
+    if not out.exists() or out.stat().st_size == 0:
+        return set()
+
+    existing_df = pd.read_csv(out)
+    required_columns = {"dataset_name", "evolution_type", "current_sequence"}
+    missing_columns = required_columns - set(existing_df.columns)
+    if missing_columns:
+        raise KeyError(
+            f"Existing results file is missing required columns: {sorted(missing_columns)}"
+        )
+
+    combo_df = existing_df[
+        (existing_df["dataset_name"] == str(dataset_name))
+        & (existing_df["evolution_type"] == str(evolution_type))
+    ]
+
+    completed: set[frozenset[int]] = set()
+    for raw_sequence in combo_df["current_sequence"].dropna().unique().tolist():
+        completed.add(_parse_stage_values(raw_sequence))
+
+    return completed
+
+
 def run_error_evolution(
     dataset_name: DatasetName,
     evolution_type: EvolutionType,
@@ -231,7 +273,16 @@ def run_error_evolution(
     )
     stage_to_strategies = _build_unique_stages(list(grouped.keys()), sequences_by_strategy)
     stages = sorted(stage_to_strategies.keys(), key=lambda stage: (len(stage), tuple(sorted(stage))))
+    completed_stages = _load_completed_stages(
+        output_path=output_path,
+        dataset_name=dataset_name,
+        evolution_type=evolution_type,
+    )
+    stages = [stage for stage in stages if stage not in completed_stages]
     step_count = len(stages)
+
+    if step_count == 0:
+        return None
 
     all_rows: list[dict[str, Any]] = []
 
