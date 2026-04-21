@@ -1,0 +1,34 @@
+========================================================================
+Dataset: invivo | Evolution: wavelength
+Seeds: [0, 1, 2]
+Group importance order (highest -> lowest):
+ 1. group=735: mean_sum_sage=0.01630254 (seed_std=0.01985830)
+ 2. group=810: mean_sum_sage=0.01307226 (seed_std=0.03512871)
+ 3. group=850: mean_sum_sage=-0.06431728 (seed_std=0.06204215)
+========================================================================
+Dataset: invivo | Evolution: detector_distance
+Seeds: [0, 1, 2]
+Group importance order (highest -> lowest):
+ 1. group=100: mean_sum_sage=0.00365908 (seed_std=0.01422583)
+ 2. group=75: mean_sum_sage=0.00254082 (seed_std=0.02005188)
+ 3. group=15: mean_sum_sage=-0.01049441 (seed_std=0.01455010)
+ 4. group=45: mean_sum_sage=-0.01558301 (seed_std=0.02150426)
+ 5. group=30: mean_sum_sage=-0.01670661 (seed_std=0.01765221)
+========================================================================
+Dataset: simulation | Evolution: wavelength
+Seeds: [4, 7, 9]
+Group importance order (highest -> lowest):
+ 1. group=735: mean_sum_sage=0.01004347 (seed_std=0.00923778)
+ 2. group=690: mean_sum_sage=0.00531128 (seed_std=0.00777060)
+ 3. group=850: mean_sum_sage=0.00239689 (seed_std=0.00197427)
+ 4. group=910: mean_sum_sage=-0.00206480 (seed_std=0.00691437)
+ 5. group=810: mean_sum_sage=-0.00664640 (seed_std=0.00823910)
+========================================================================
+Dataset: simulation | Evolution: detector_distance
+Seeds: [4, 7, 9]
+Group importance order (highest -> lowest):
+ 1. group=90: mean_sum_sage=0.01013576 (seed_std=0.00830603)
+ 2. group=50: mean_sum_sage=0.00337801 (seed_std=0.00543626)
+ 3. group=30: mean_sum_sage=-0.00104486 (seed_std=0.00161642)
+ 4. group=70: mean_sum_sage=-0.00138535 (seed_std=0.00615807)
+ 5. group=10: mean_sum_sage=-0.00174667 (seed_std=0.00190467)
