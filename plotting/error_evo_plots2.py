@@ -22,6 +22,7 @@ def _load_sequences() -> dict:
 
     return payload
 
+
 def _parse_sequence(value: str) -> tuple[int, ...]:
     parsed = ast.literal_eval(value)
     if not isinstance(parsed, list):
@@ -29,28 +30,18 @@ def _parse_sequence(value: str) -> tuple[int, ...]:
     return tuple(sorted(int(item) for item in parsed))
 
 
-def _strategy_in_row(selection_strategies: str, strategy: str) -> bool:
-    return strategy in selection_strategies.split("|")
-
-
 def _build_strategy_curve(
     df: pd.DataFrame,
     sequence: list[int],
-    strategy: str,
 ) -> pd.DataFrame:
     rows: list[dict[str, float | int]] = []
 
     for length in range(1, len(sequence) + 1):
         prefix = tuple(sorted(sequence[:length]))
-        matching = df[
-            (df["parsed_sequence"] == prefix)
-            & df["selection_strategies"].apply(lambda value: _strategy_in_row(value, strategy))
-        ]
+        matching = df[(df["parsed_sequence"] == prefix)]
 
         if matching.empty:
-            raise ValueError(
-                f"No rows found for strategy={strategy}, prefix={list(prefix)}"
-            )
+            raise ValueError(f"No rows found for prefix={list(prefix)}")
 
         variance = float(matching["test_error"].var())
         rows.append(
@@ -58,7 +49,7 @@ def _build_strategy_curve(
                 "sequence_length": length,
                 "mean": float(matching["test_error"].mean()),
                 "variance": 0.0 if pd.isna(variance) else variance,
-                "std": 0.0 if pd.isna(variance) else variance ** 0.5,
+                "std": 0.0 if pd.isna(variance) else variance**0.5,
             }
         )
 
@@ -76,9 +67,7 @@ def plot_error_evolution(
     df = df[(df["dataset_name"] == dataset_name) & (df["evolution_type"] == evolution_type)].copy()
 
     if df.empty:
-        raise ValueError(
-            f"No rows found for dataset_name={dataset_name}, evolution_type={evolution_type}"
-        )
+        raise ValueError(f"No rows found for dataset_name={dataset_name}, evolution_type={evolution_type}")
 
     if dataset_name == "simulation":
         df["test_error"] = df["test_error"] * 100
@@ -90,10 +79,11 @@ def plot_error_evolution(
 
     fig, ax = plt.subplots()
 
-    for strategy in STRATEGY_ORDER:
-        curve = _build_strategy_curve(df, strategy_sequences[strategy], strategy)
+    offsets = [0.0, 0.05, 0.1]
+    for strategy, offset in zip(STRATEGY_ORDER, offsets):
+        curve = _build_strategy_curve(df, strategy_sequences[strategy])
         ax.errorbar(
-            curve["sequence_length"],
+            curve["sequence_length"] + offset,
             curve["mean"],
             yerr=curve["std"],
             fmt="-o",

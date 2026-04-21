@@ -114,6 +114,23 @@ def _resolve_sequence(available_group_values: list[int], requested_sequence: lis
     return sequence
 
 
+def _normalize_custom_stages(
+    available_group_values: list[int],
+    custom_stages: list[list[int]],
+) -> list[frozenset[int]]:
+    if len(custom_stages) == 0:
+        raise ValueError("custom_stages must contain at least one stage when provided")
+
+    normalized_stages: list[frozenset[int]] = []
+    for stage_values in custom_stages:
+        if not isinstance(stage_values, list):
+            raise ValueError("Each custom stage must be a list of integers")
+        resolved_stage = _resolve_sequence(available_group_values, stage_values)
+        normalized_stages.append(frozenset(resolved_stage))
+
+    return normalized_stages
+
+
 def _stage_features(
     stage_values: frozenset[int],
     feature_to_group: dict[str, int],
@@ -243,6 +260,7 @@ def run_error_evolution(
     dataset_name: DatasetName,
     evolution_type: EvolutionType,
     model_name: ModelName,
+    custom_stages: list[list[int]] | None = None,
     seeds: list[int] | None = None,
     n_jobs_steps: int = 1,
     n_val_groups: int = 1,
@@ -267,12 +285,17 @@ def run_error_evolution(
     grouped = _build_group_to_features(cfg, evolution_type=evolution_type)
     feature_to_group = _build_feature_to_group(cfg, evolution_type=evolution_type)
 
-    sequences_by_strategy = _load_sequences_for_combo(
-        dataset_name=dataset_name,
-        evolution_type=evolution_type,
-    )
-    stage_to_strategies = _build_unique_stages(list(grouped.keys()), sequences_by_strategy)
-    stages = sorted(stage_to_strategies.keys(), key=lambda stage: (len(stage), tuple(sorted(stage))))
+    if custom_stages is None:
+        sequences_by_strategy = _load_sequences_for_combo(
+            dataset_name=dataset_name,
+            evolution_type=evolution_type,
+        )
+        stage_to_strategies = _build_unique_stages(list(grouped.keys()), sequences_by_strategy)
+        stages = sorted(stage_to_strategies.keys(), key=lambda stage: (len(stage), tuple(sorted(stage))))
+    else:
+        stages = _normalize_custom_stages(list(grouped.keys()), custom_stages)
+        stage_to_strategies = {stage: {"custom"} for stage in stages}
+
     completed_stages = _load_completed_stages(
         output_path=output_path,
         dataset_name=dataset_name,
@@ -359,9 +382,10 @@ def run_error_evolution(
 
 if __name__ == "__main__":
     run_error_evolution(
-        # dataset_name="invivo",
-        dataset_name="simulation",
+        dataset_name="invivo",
+        # dataset_name="simulation",
         # evolution_type="detector_distance",
+        # custom_stages=[[100]],
         evolution_type="wavelength",
         model_name="mlp",
         n_jobs_steps=5,
@@ -370,5 +394,5 @@ if __name__ == "__main__":
         n_test_groups=1,
         n_trials=30,
         n_jobs=30,
-        device="cuda",
+        device="mps",
     )
