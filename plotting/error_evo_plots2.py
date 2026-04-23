@@ -97,7 +97,7 @@ def plot_error_evolution(
     ax.set_xticks(x_values)
     ax.set_xlabel("Wavelength Count" if evolution_type == "wavelength" else "Detector Count")
     ax.set_ylabel("Test MAE (%Saturation)")
-    ax.set_ylim(bottom=0)
+    # ax.set_ylim(bottom=0)
     ax.legend()
 
     FIGURE_DIR.mkdir(parents=True, exist_ok=True)
@@ -116,9 +116,9 @@ if __name__ == "__main__":
         ("invivo", "wavelength", "invivo_wavelength"),
     ]
 
-    for dataset_name, evolution_type, short_name in combinations:
+    for ds_name, evo_type, short_name in combinations:
         plot_error_evolution(
-            dataset_name=dataset_name,
-            evolution_type=evolution_type,
+            dataset_name=ds_name,
+            evolution_type=evo_type,
             output_name=f"error_evolution_{short_name}",
         )

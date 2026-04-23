@@ -62,9 +62,9 @@ The main selection stage is carried out with the RFI-greedy scripts. These exper
 
 The preferred error-evolution experiment is implemented in `error_evolution_alt.py`. At each stage, one additional detector or wavelength is incorporated into the active measurement set. All unselected variables are replaced with their training-set mean so that they contribute no useful information to the prediction. In this way, the performance at each stage depends only on the variables selected up to that point. This experiment compares the proposed sequence against SAGE, PFI, and any other candidate ordering defined in `data/sequences.yaml`.
 
-### 5. Legacy Stage-Wise Error Evolution
+### 5. Stage-Wise Error Evolution With Dynamic Models
 
-The older `error_evolution.py` workflow retrains a new predictive model at every stage using only the currently selected detectors or wavelengths. Although this can still be informative, it introduces additional stochasticity and is therefore less suitable as the primary analysis.
+`error_evolution.py` workflow retrains a new predictive model at every stage using only the currently selected detectors or wavelengths. Stores the data int `data/error_evolution.csv`. Has a smart auto feature to only redo datapoints which do not exist in the csv since each training takes a while. The auto mode can be turned of to pass it specific sequences. Has a slightly different interface than `error_evolution_alt.py`
 
 ### 6. Mutual-Information Evolution
 
@@ -88,8 +88,8 @@ Once the relevant runs have been completed for either dataset, the final figures
 | `simulation_arf_fit.py` | Diagnostic ARF fitting for simulation data | Use to evaluate conditional density fit quality and ARF hyperparameters. |
 | `invivo_rfi_greedy.py` | Main RFI-greedy selection for invivo data | Primary invivo feature-selection experiment. |
 | `simulation_rfi_greedy.py` | Main RFI-greedy selection for simulation data | Primary simulation feature-selection experiment. |
-| `error_evolution_alt.py` | Preferred stage-wise performance evaluation with fixed pretrained models | Use for the main comparative error-evolution analysis. |
-| `error_evolution.py` | Legacy stage-wise performance evaluation with retraining at each stage | Use only if the older formulation is specifically required. |
+| `error_evolution_alt.py` | Stage-wise performance evaluation with fixed pretrained models |  Alternate error-evolution analysis. |
+| `error_evolution.py` | Stage-wise performance evaluation with retraining at each stage. | Is better suited with our setup |
 | `mi_evolution.py` | Stage-wise mutual-information analysis | Use as a complementary comparison between candidate sequences. |
 | `pipeline_check.py` | Manual pipeline and search-space verification | Use for development and debugging, not as part of the final reported workflow. |
 
