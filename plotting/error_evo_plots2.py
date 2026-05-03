@@ -11,6 +11,7 @@ FIGURE_DIR = Path(__file__).parents[1] / "figures"
 RESULT_DIR = Path(__file__).parents[1] / "results"
 DATA_DIR = Path(__file__).parents[1] / "data"
 STRATEGY_ORDER = ["OURS", "PFI", "SAGE"]
+STRATEGY_LABELS = {"OURS": "ROWS"}
 
 
 def _load_sequences() -> dict:
@@ -89,7 +90,7 @@ def plot_error_evolution(
             fmt="-o",
             capsize=3,
             elinewidth=1,
-            label=strategy,
+            label=STRATEGY_LABELS.get(strategy, strategy),
         )
 
     x_values = list(range(1, len(next(iter(strategy_sequences.values()))) + 1))

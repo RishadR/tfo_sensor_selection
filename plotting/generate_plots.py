@@ -10,6 +10,7 @@ from load_config import load_plot_config
 
 FIGURE_DIR = Path(__file__).parents[1] / "figures"
 RESULT_DIR = Path(__file__).parents[1] / "results"
+METHOD_LABELS = {"OURS": "ROWS"}
 
 
 def _load_error_evolution_experiments() -> dict[str, dict]:
@@ -354,6 +355,7 @@ def plot_mi_evolution(
     for experiment in matching_experiments:
         steps = experiment.get("steps", [])
         method = str(experiment.get("method", "unknown"))
+        display_method = METHOD_LABELS.get(method, method)
         if not isinstance(steps, list) or len(steps) == 0:
             raise ValueError(
                 f"Experiment for dataset={dataset_name}, evolution_type={evolution_type}, method={method} does not contain any steps"
@@ -370,7 +372,7 @@ def plot_mi_evolution(
             dtype=float,
         )
 
-        line = ax.plot(x, y, marker="o", label=method)[0]
+        line = ax.plot(x, y, marker="o", label=display_method)[0]
         ax.fill_between(
             x,
             y + ci_lower,
@@ -430,7 +432,7 @@ if __name__ == "__main__":
     # plot_invivo_detector_distance_rfi(seed=0)
     # plot_simulation_wavelength_rfi(seed=0)
     # plot_simulation_detector_distance_rfi(seed=0)
-    # plot_error_evolution_test_mae(['error_evolution_0004'], ['Ours'])
+    # plot_error_evolution_test_mae(['error_evolution_0004'], ['ROWS'])
     plot_invivo_wavelength_mi()
     plot_invivo_detector_distance_mi()
     plot_simulation_wavelength_mi()

@@ -9,6 +9,7 @@ from load_config import load_plot_config
 FIGURE_DIR = Path(__file__).parents[1] / "figures"
 RESULT_DIR = Path(__file__).parents[1] / "results"
 STRATEGY_ORDER = ["OURS", "PFI", "SAGE"]
+STRATEGY_LABELS = {"OURS": "ROWS"}
 
 
 def plot_error_evolution_alt(
@@ -52,7 +53,7 @@ def plot_error_evolution_alt(
             fmt="-o",
             capsize=3,
             elinewidth=1,
-            label=strategy,
+            label=STRATEGY_LABELS.get(strategy, strategy),
         )
 
     ax.xaxis.set_major_locator(plt.MaxNLocator(integer=True))   # type: ignore
