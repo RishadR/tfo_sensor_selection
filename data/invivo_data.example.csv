@@ -1,0 +1,2 @@
+experiment_id,ratio_ch1_wv1,ratio_ch2_wv1,ratio_ch3_wv1,ratio_ch4_wv1,ratio_ch5_wv1,ratio_ch1_wv2,ratio_ch2_wv2,ratio_ch3_wv2,ratio_ch4_wv2,ratio_ch5_wv2,ratio_ch1_wv3,ratio_ch2_wv3,ratio_ch3_wv3,ratio_ch4_wv3,ratio_ch5_wv3,fSaO2,validation_idx
+example_001,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,50.0,a

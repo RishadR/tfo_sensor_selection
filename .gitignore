@@ -70,6 +70,9 @@ Thumbs.db
 # Logs
 *.log
 
+# Local sensitive datasets
+/data/invivo_data.csv
+
 # models
 # Keep outer models directory structure, but ignore files inside it.
 /models/**
