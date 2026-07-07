@@ -1,2 +1,7 @@
-Average computational time: 44.498963 seconds
-Standard deviation: 3.994009 seconds
+n_runs: 20
+
+Step                          Mean (s)      Std (s)
+------------------------- ------------ ------------
+ARF fit                         30.397        0.479
+MLP training                    12.636        1.127
+synthesize_one                0.008795     0.000450

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-import importlib
 from typing import Any
 
 import numpy as np
@@ -34,6 +33,10 @@ class MLPModel(BaseModel):
             "batch_size": trial.suggest_categorical("batch_size", [32, 64, 128, 256]),
             "epochs": trial.suggest_int("epochs", 50, 50),
         }
+
+    def __setstate__(self, state: dict) -> None:
+        state.setdefault("device", torch.device("cpu"))
+        self.__dict__.update(state)
 
     def set_params(self, **params: Any) -> "MLPModel":
         merged = self.params.__dict__.copy()
