@@ -139,6 +139,7 @@ def main() -> None:
         n_test_groups=1,
         n_trials=10,
         seed=42,
+        record_results=False,
     )
     _print_result("baseline_random_forest", baseline)
     _print_result("example_random_forest", example_random_forest())

@@ -1,0 +1,2 @@
+Average computational time: 44.498963 seconds
+Standard deviation: 3.994009 seconds
